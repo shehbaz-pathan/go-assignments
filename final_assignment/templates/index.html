@@ -1,0 +1,27 @@
+<html>
+  <style>
+    table, th, td { border: 1px solid; text-align: center;width: 30%;}
+    body { background-color: rgb(227, 227, 231);}
+    h1 { color: rgb(69, 70, 69);}
+  </style>
+  <title>Book Details</title>
+  <h1 align="center">Book Details</h1>
+  <table align="center">
+    <tr>
+      <th>Isbn</th>
+      <th>Title</th>
+      <th>Synopsis</th>
+      <th>AuthorName</th>
+      <th>Price</th>
+    </tr>
+    {{range .}}
+    <tr>
+      <td>{{.Isbn}}</td>
+      <td>{{.Title}}</td>
+      <td>{{.Synopsis}}</td>
+      <td>{{.AuthorName}}</td>
+      <td>{{.Price}}</td>
+    </tr>
+    {{end}}
+  </table>
+</html>
