@@ -96,24 +96,4 @@ func TestGetBookByTitleHandler(t *testing.T) {
 	json.Unmarshal(w.Body.Bytes(), &Result)
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Equal(t, expectedResult, Result)
-	/*data := map[string]string {"Test Book", "Fake Book", "Latest Book"}
-	for i, title := range titles {
-		rows := sqlmock.NewRows([]string{"Isbn", "Title", "Synopsis", "AuthorName", "Price"}).
-			AddRow(123+i, title, "This is a "+title, "Shehbaz", 120.00+float32(i))
-		mock.ExpectPrepare("select (.+) from book_info where Title = ?")
-		mock.ExpectQuery("select (.+) from book_info where Title = ?").WithArgs(title).WillReturnRows(rows)
-		r := SetupRouter()
-		r.GET("/getbookbytitle/:title", GetBookByTitleHandler(dbops))
-		path := "/getbookbytitle/" + title
-		req, _ := http.NewRequest(http.MethodGet, path, nil)
-		w := httptest.NewRecorder()
-		r.ServeHTTP(w, req)
-		expectedResult := []Book{
-			{Isbn: 123 + int64(i), Title: title, Synopsis: "This is a " + title, AuthorName: "Shehbaz", Price: 120.00 + float32(i)},
-		}
-		Result := []Book{}
-		json.Unmarshal(w.Body.Bytes(), &Result)
-		assert.Equal(t, http.StatusOK, w.Code)
-		assert.Equal(t, expectedResult, Result)
-	}*/
 }
