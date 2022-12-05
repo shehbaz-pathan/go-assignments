@@ -8,11 +8,11 @@ import (
 
 func TestAddBookDB(t *testing.T) {
 	book := Book{
-		Isbn:       123,
-		Title:      "Fake Book",
-		Synopsis:   "This is fake book",
-		AuthorName: "Shehbaz",
-		Price:      100.20,
+		Isbn:       9780772013040,
+		Title:      "The Suicide Murders",
+		Synopsis:   "Book by Engel, Howard",
+		AuthorName: "ENGEL, Howard",
+		Price:      62.92,
 	}
 	db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
 	if err != nil {
@@ -35,13 +35,13 @@ func TestGetBooksDB(t *testing.T) {
 	defer db.Close()
 	dbops := &DBHandler{db}
 	rows := sqlmock.NewRows([]string{"Isbn", "Title", "Synopsis", "AuthorName", "Price"}).
-		AddRow(123, "Test Book", "This is a test book", "Shehbaz", 120.00).
-		AddRow(124, "Fake Book", "This is a fake book", "Shahzain", 150.50)
+		AddRow(9780772013040, "The Suicide Murders", "Book by Engel, Howard", "ENGEL, Howard", 62.92).
+		AddRow(9781982156909, "The Comedy of Errors", "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers", "William Shakespeare", 10.39)
 	mock.ExpectPrepare("select (.+) from book_info")
 	mock.ExpectQuery("select (.+) from book_info").WillReturnRows(rows)
 	expectedResult := []Book{
-		{Isbn: 123, Title: "Test Book", Synopsis: "This is a test book", AuthorName: "Shehbaz", Price: 120.00},
-		{Isbn: 124, Title: "Fake Book", Synopsis: "This is a fake book", AuthorName: "Shahzain", Price: 150.50},
+		{Isbn: 9780772013040, Title: "The Suicide Murders", Synopsis: "Book by Engel, Howard", AuthorName: "ENGEL, Howard", Price: 62.92},
+		{Isbn: 9781982156909, Title: "The Comedy of Errors", Synopsis: "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers", AuthorName: "William Shakespeare", Price: 10.39},
 	}
 	Result, err := dbops.GetBooks()
 	assert.Equal(t, nil, err)
@@ -55,14 +55,14 @@ func TestGetBookByTitleDB(t *testing.T) {
 	}
 	defer db.Close()
 	dbops := &DBHandler{db}
-	titles := []string{"Test Book", "Fake Book", "Latest Book"}
+	titles := []string{"Test Book", "Fake Book", "Best Book"}
 	for i, title := range titles {
 		rows := sqlmock.NewRows([]string{"Isbn", "Title", "Synopsis", "AuthorName", "Price"}).
-			AddRow(123+i, title, "This is a "+title, "Shehbaz", 120.00+float32(i))
+			AddRow(123+i, title, "This is a "+title, "Unkown Author", 120.00+float32(i))
 		mock.ExpectPrepare("select (.+) from book_info where Title = ?")
 		mock.ExpectQuery("select (.+) from book_info where Title = ?").WithArgs(title).WillReturnRows(rows)
 		expectedResult := []Book{
-			{Isbn: 123 + int64(i), Title: title, Synopsis: "This is a " + title, AuthorName: "Shehbaz", Price: 120.00 + float32(i)},
+			{Isbn: 123 + int64(i), Title: title, Synopsis: "This is a " + title, AuthorName: "Unkown Author", Price: 120.00 + float32(i)},
 		}
 		Result, err := dbops.GetBookByTitle(title)
 		assert.Equal(t, nil, err)

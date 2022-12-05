@@ -20,11 +20,11 @@ func SetupRouter() *gin.Engine {
 
 func TestAddBookHandler(t *testing.T) {
 	book := Book{
-		Isbn:       123,
-		Title:      "Fake Book",
-		Synopsis:   "This is fake book",
-		AuthorName: "Shehbaz",
-		Price:      100.20,
+		Isbn:       9780772013040,
+		Title:      "The Suicide Murders",
+		Synopsis:   "Book by Engel, Howard",
+		AuthorName: "ENGEL, Howard",
+		Price:      62.92,
 	}
 	db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
 	if err != nil {
@@ -55,8 +55,8 @@ func TestGetBooksHandler(t *testing.T) {
 	defer db.Close()
 	dbops := &DBHandler{db}
 	rows := sqlmock.NewRows([]string{"Isbn", "Title", "Synopsis", "AuthorName", "Price"}).
-		AddRow(123, "Test Book", "This is a test book", "Shehbaz", 120.00).
-		AddRow(124, "Fake Book", "This is a fake book", "Shahzain", 150.50)
+		AddRow(9780772013040, "The Suicide Murders", "Book by Engel, Howard", "ENGEL, Howard", 62.92).
+		AddRow(9781982156909, "The Comedy of Errors", "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers", "William Shakespeare", 10.39)
 	mock.ExpectPrepare("select (.+) from book_info")
 	mock.ExpectQuery("select (.+) from book_info").WillReturnRows(rows)
 	r := SetupRouter()
@@ -65,8 +65,8 @@ func TestGetBooksHandler(t *testing.T) {
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	expectedResult := []Book{
-		{Isbn: 123, Title: "Test Book", Synopsis: "This is a test book", AuthorName: "Shehbaz", Price: 120.00},
-		{Isbn: 124, Title: "Fake Book", Synopsis: "This is a fake book", AuthorName: "Shahzain", Price: 150.50},
+		{Isbn: 9780772013040, Title: "The Suicide Murders", Synopsis: "Book by Engel, Howard", AuthorName: "ENGEL, Howard", Price: 62.92},
+		{Isbn: 9781982156909, Title: "The Comedy of Errors", Synopsis: "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers", AuthorName: "William Shakespeare", Price: 10.39},
 	}
 	Result := []Book{}
 	json.Unmarshal(w.Body.Bytes(), &Result)
@@ -80,7 +80,23 @@ func TestGetBookByTitleHandler(t *testing.T) {
 	}
 	defer db.Close()
 	dbops := &DBHandler{db}
-	titles := []string{"Test Book", "Fake Book", "Latest Book"}
+	rows := sqlmock.NewRows([]string{"Isbn", "Title", "Synopsis", "AuthorName", "Price"}).
+		AddRow(9781982156909, "The Comedy of Errors", "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers", "William Shakespeare", 10.39)
+	mock.ExpectPrepare("select (.+) from book_info where Title = ?")
+	mock.ExpectQuery("select (.+) from book_info where Title = ?").WithArgs("The Comedy of Errors").WillReturnRows(rows)
+	r := SetupRouter()
+	r.GET("/getbookbytitle/:title", GetBookByTitleHandler(dbops))
+	req, _ := http.NewRequest(http.MethodGet, "/getbookbytitle/The Comedy of Errors", nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	expectedResult := []Book{
+		{Isbn: 9781982156909, Title: "The Comedy of Errors", Synopsis: "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers", AuthorName: "William Shakespeare", Price: 10.39},
+	}
+	Result := []Book{}
+	json.Unmarshal(w.Body.Bytes(), &Result)
+	assert.Equal(t, http.StatusOK, w.Code)
+	assert.Equal(t, expectedResult, Result)
+	/*data := map[string]string {"Test Book", "Fake Book", "Latest Book"}
 	for i, title := range titles {
 		rows := sqlmock.NewRows([]string{"Isbn", "Title", "Synopsis", "AuthorName", "Price"}).
 			AddRow(123+i, title, "This is a "+title, "Shehbaz", 120.00+float32(i))
@@ -99,5 +115,5 @@ func TestGetBookByTitleHandler(t *testing.T) {
 		json.Unmarshal(w.Body.Bytes(), &Result)
 		assert.Equal(t, http.StatusOK, w.Code)
 		assert.Equal(t, expectedResult, Result)
-	}
+	}*/
 }
