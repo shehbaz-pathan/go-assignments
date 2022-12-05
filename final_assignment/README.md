@@ -46,6 +46,16 @@ go build .
 1. book-info executable file will be get generated, execute the file it will start the web-server on port 8888 with all the routes
 ```sh
 ./book-info
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] GET    /getbooks                 --> main.GetBooksHandler.func1 (3 handlers)
+[GIN-debug] POST   /addbook                  --> main.AddBookHandler.func1 (3 handlers)
+[GIN-debug] GET    /getbookbytitle/:title    --> main.GetBookByTitleHandler.func1 (3 handlers)
+[GIN-debug] GET    /bookdetails              --> main.GetBookDetails.func1 (3 handlers)
 ```
 **Operations**
 - Add Book
