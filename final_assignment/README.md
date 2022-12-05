@@ -37,7 +37,7 @@ go test -v
 PASS
 ok  	github.com/shehbaz-pathan/go-assignments/fina-assignment/book-info	0.006s
 ```
-***Build the App**
+**Build the App**
 1. run the go build command
 ```sh
 go build .
@@ -47,3 +47,56 @@ go build .
 ```sh
 ./book-info
 ```
+**Operations**
+- Add Book
+
+```sh 
+curl -XPOST http://localhost:8888/addbook -d '{"isbn": 9781982156909, "title": "The Comedy of Errors", "synopsis": "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers", "authorname": "William Shakespeare", "price": 10.39}'
+```
+Output
+```
+{
+    "isbn": 9781982156909,
+    "title": "The Comedy of Errors",
+    "synopsis": "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers",
+    "authorname": "William Shakespeare",
+    "price": 10.39
+}
+```
+- Get All Books
+```sh
+curl -XGET http://localhost:8888/getbooks
+```
+Output
+```
+[
+    {
+        "isbn": 9781982156909,
+        "title": "The Comedy of Errors",
+        "synopsis": "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers",
+        "authorname": "William Shakespeare",
+        "price": 10.39
+    }
+]
+```
+- Search Book By Book Titile
+```sh
+curl -XGET http://localhost:8888/getbookbytitle/The%20Comedy%20of%20Errors
+```
+Output
+```
+[
+    {
+        "isbn": 9781982156909,
+        "title": "The Comedy of Errors",
+        "synopsis": "The authoritative edition of The Comedy of Errors from The Folger Shakespeare Library, the trusted and widely used Shakespeare series for students and general readers",
+        "authorname": "William Shakespeare",
+        "price": 10.39
+    }
+]
+```
+- Books Details On HTML Page
+```
+http://localhost:8888/bookdetails
+```
+![Folder](./book-details-htlm.png)
