@@ -26,15 +26,13 @@ type DBHandler struct {
 	db *sql.DB
 }
 func main() {
-	var dbh = DBHandler{}
-	var dbops = &dbh
 	db,err:=DBConnection()
-	dbh.db = db
 	if err!=nil {
 		fmt.Println("Error connecting DB",err)
 		return
 	}
-	defer dbh.db.Close()
+	defer db.Close()
+	dbops:= &DBHandler{db}
 	router:= gin.Default()
 	router.LoadHTMLFiles("./templates/index.html")
 	router.GET("/getbooks",GetBooksHandler(dbops))

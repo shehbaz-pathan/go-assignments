@@ -51,7 +51,7 @@ func (dbh *DBHandler)AddBook(b Book) error {
 	}
 	_,err=res.RowsAffected()
 	if err!=nil {
-		log.Printf("Error %s while checking for rows affected")
+		log.Printf("Error %s while checking for rows affected",err)
                 return err
 	}
 	return nil
