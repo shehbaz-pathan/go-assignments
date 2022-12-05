@@ -99,4 +99,4 @@ Output
 ```
 http://localhost:8888/bookdetails
 ```
-![Folder](./book-details-htlm.png)
+![Folder](./snaps/book-details-htlm.png)
