@@ -1,3 +1,4 @@
+**Task**: https://github.com/infracloudio/citadel-internal/tree/master/workshops/go#structs-and-methods
 ## Execute Program
 1. Clone the repository and navigate to task1-structs folder
 2. Run the program
