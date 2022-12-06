@@ -1,3 +1,4 @@
+**Task**: https://github.com/infracloudio/citadel-internal/tree/master/workshops/go#interface
 ## Execute Program
 1. Clone the repository and navigate to task2-interfaces folder
 2. Run the program
