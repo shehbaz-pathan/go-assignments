@@ -1,3 +1,4 @@
+**Task**: https://github.com/infracloudio/citadel-internal/tree/master/workshops/go#final-assignment-hands-on-activity
 ## Ruuning Program
 **Pre-Requisites**
 - docker-compose
